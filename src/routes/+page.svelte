@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Dropdown from '$lib/components/Dropdown.svelte';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import type { Item } from '$lib/types/item';
 	import type { PageProps } from './$types';
@@ -57,23 +58,13 @@
 	<p style="color: red">{form?.message}</p>
 {/if}
 
-<div>
-	<h2>Filters:</h2>
-	<select name="tag-filter" id="tag-filter" bind:value={tagFilter}>
-		<option value="">All</option>
-		{#each allTags as tag}
-			<option value={tag}>{tag}</option>
-		{/each}
-	</select>
-</div>
-
-<div>
-	<label for="sort">Sort by:</label>
-	<select name="sort" id="sort" bind:value={sort}>
-		{#each ['name', 'tags', 'price'] as field}
-			<option value={field}>{field}</option>
-		{/each}
-	</select>
+<div class="flex flex-row justify-between px-4">
+	<Dropdown
+		label="Filter by tag:"
+		bind:value={tagFilter}
+		options={[{ value: '', label: 'All' }, ...allTags]}
+	/>
+	<Dropdown label="Sort by:" bind:value={sort} options={['name', 'tags', 'price']} />
 </div>
 
 <ItemList items={itemsToDisplay} />
