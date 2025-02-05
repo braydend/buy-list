@@ -1,8 +1,14 @@
-import type { PageServerLoad } from './$types';
+import type { Item } from "$lib/types/item";
+import type { PageServerLoad } from "./$types";
 
-export type Item = { name: string; tags: string[]; price?: number };
-
-const items: Item[] = [];
+const items: Item[] = [
+	{
+		name: "Shovel",
+		tags: ["Garden", "Tool"],
+		price: 20.00,
+	},
+	{ name: "Hammer", tags: ["Tool"], price: 15.32 },
+];
 
 export const actions = {
 	// 	login: async ({ cookies, request }) => {
@@ -17,26 +23,28 @@ export const actions = {
 	// },
 	addItem: async ({ request }) => {
 		const data = await request.formData();
-		const name = data.get('name');
-		const tags = data.get('tags');
-		const price = data.get('price');
-		if (!name?.toString()) return { success: false, message: 'Name is required' };
+		const name = data.get("name");
+		const tags = data.get("tags");
+		const price = data.get("price");
+		if (!name?.toString()) {
+			return { success: false, message: "Name is required" };
+		}
 
 		const item = {
 			name: name.toString(),
-			tags: tags?.toString().split(',') ?? [],
-			price: price ? parseFloat(price.toString()) : undefined
+			tags: tags?.toString().split(",") ?? [],
+			price: price ? parseFloat(price.toString()) : undefined,
 		};
 
 		console.log({ item });
 
 		items.push(item);
 		return { success: true };
-	}
+	},
 };
 
 export const load: PageServerLoad = async () => {
 	return {
-		items
+		items,
 	};
 };
