@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import ItemList from '$lib/components/ItemList.svelte';
+	import CreateItem from '$lib/forms/CreateItem.svelte';
 	import type { Item } from '$lib/types/item';
 	import type { PageProps } from './$types';
 
@@ -32,31 +33,10 @@
 	let itemsToDisplay = $derived(
 		tagFilter === '' ? sortedItems : sortedItems.filter((item) => item.tags.includes(tagFilter))
 	);
-
-	let tags = $state<string[]>([]);
-
-	function addTagField() {
-		tags.push('');
-	}
 </script>
 
 <h1>Buy list</h1>
-<form action="?/addItem" method="post">
-	<input type="text" name="name" placeholder="Item name" />
-	{#each tags as tag, i}
-		<input type="text" name="tag" placeholder="Tag" bind:value={tags[i]} />
-	{/each}
-	<input type="text" name="tags" hidden value={tags.join(',')} />
-	<button type="button" onclick={addTagField}>Add tag</button>
-	<input type="number" name="price" placeholder="Price (optional)" />
-	<button type="submit">Add</button>
-</form>
-
-{#if form?.success}
-	<p>Item created!</p>
-{:else}
-	<p style="color: red">{form?.message}</p>
-{/if}
+<CreateItem success={form?.success} error={form?.message} />
 
 <div class="flex flex-row justify-between px-4">
 	<Dropdown
