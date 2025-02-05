@@ -1,6 +1,7 @@
 <script lang="ts">
+	import ItemList from '$lib/components/ItemList.svelte';
+	import type { Item } from '$lib/types/item';
 	import type { PageProps } from './$types';
-	import type { Item } from './+page.server';
 
 	let { data, form }: PageProps = $props();
 
@@ -75,8 +76,4 @@
 	</select>
 </div>
 
-<ul>
-	{#each itemsToDisplay as item}
-		<li>{item.name} ({item.tags.join(' | ')}){item.price ? ` ${item.price}` : ''}</li>
-	{/each}
-</ul>
+<ItemList items={itemsToDisplay} />
