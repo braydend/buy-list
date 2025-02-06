@@ -3,6 +3,7 @@
 	import ItemList from '$lib/components/ItemList.svelte';
 	import CreateItem from '$lib/forms/CreateItem.svelte';
 	import type { Item } from '$lib/types/item';
+	import Heading from '$lib/typography/Heading.svelte';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -35,16 +36,18 @@
 	);
 </script>
 
-<h1>Buy list</h1>
-<CreateItem success={form?.success} error={form?.message} />
+<main class="p-4">
+	<Heading level={1}>Buy list</Heading>
+	<CreateItem success={form?.success} error={form?.message} />
 
-<div class="flex flex-row justify-between px-4">
-	<Dropdown
-		label="Filter by tag:"
-		bind:value={tagFilter}
-		options={[{ value: '', label: 'All' }, ...allTags]}
-	/>
-	<Dropdown label="Sort by:" bind:value={sort} options={['name', 'tags', 'price']} />
-</div>
+	<div class="flex flex-row justify-between">
+		<Dropdown
+			label="Filter by tag:"
+			bind:value={tagFilter}
+			options={[{ value: '', label: 'All' }, ...allTags]}
+		/>
+		<Dropdown label="Sort by:" bind:value={sort} options={['name', 'tags', 'price']} />
+	</div>
 
-<ItemList items={itemsToDisplay} />
+	<ItemList items={itemsToDisplay} />
+</main>
