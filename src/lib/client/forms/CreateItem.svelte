@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$lib/client/components/Button.svelte';
 
 	const { success, error }: { success?: boolean; error?: string } = $props();
 
