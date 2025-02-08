@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Dropdown from '$lib/components/Dropdown.svelte';
-	import ItemList from '$lib/components/ItemList.svelte';
-	import CreateItem from '$lib/forms/CreateItem.svelte';
-	import type { Item } from '$lib/types/item';
-	import Heading from '$lib/typography/Heading.svelte';
+	import Dropdown from '$lib/client/components/Dropdown.svelte';
+	import ItemList from '$lib/client/components/ItemList.svelte';
+	import CreateItem from '$lib/client/forms/CreateItem.svelte';
+	import type { Item } from '$lib/common/types/item';
+	import Heading from '$lib/client/typography/Heading.svelte';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();

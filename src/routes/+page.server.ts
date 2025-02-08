@@ -1,4 +1,4 @@
-import type { Item } from "$lib/types/item";
+import type { Item } from "$lib/common/types/item";
 import type { PageServerLoad } from "./$types";
 
 const items: Item[] = [

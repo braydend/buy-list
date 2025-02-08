@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Item } from '$lib/types/item';
+	import type { Item } from '$lib/common/types/item';
 	import Tag from './Tag.svelte';
 
 	const { items }: { items: Item[] } = $props();
