@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/client/components/Button.svelte';
 	import type { Item } from '$lib/common/types/item';
+	import Input from '$lib/client/components/Input.svelte';
 
 	const {
 		success,
@@ -46,20 +47,29 @@
 			method="post"
 			class={`flex flex-col gap-4 overflow-hidden bg-slate-200 p-4`}
 		>
-			<input type="text" name="name" placeholder="Item name" value={initialData?.name} />
-			{#if Boolean(errors?.find(({ field }) => field === 'name'))}
-				<p style="color: red">{errors?.find(({ field }) => field === 'name')?.message}</p>
-			{/if}
-			<input type="number" name="price" placeholder="Price (optional)" value={initialData?.price} />
-			{#if Boolean(errors?.find(({ field }) => field === 'price'))}
-				<p style="color: red">{errors?.find(({ field }) => field === 'price')?.message}</p>
-			{/if}
+			<Input
+				type="text"
+				name="name"
+				placeholder="Item name"
+				value={initialData?.name}
+				error={errors?.find(({ field }) => field === 'name')?.message}
+			/>
+			<Input
+				type="number"
+				name="price"
+				placeholder="Price"
+				value={initialData?.price}
+				error={errors?.find(({ field }) => field === 'price')?.message}
+			/>
 			{#each tags as _, i}
-				<input type="text" name="tag" placeholder="Tag" bind:value={tags[i]} />
+				<Input
+					type="text"
+					name="tag"
+					placeholder="Tag"
+					bind:value={tags[i]}
+					error={errors?.find(({ field }) => field === 'tags')?.message}
+				/>
 			{/each}
-			{#if Boolean(errors?.find(({ field }) => field === 'tags'))}
-				<p style="color: red">{errors?.find(({ field }) => field === 'tags')?.message}</p>
-			{/if}
 			<input type="text" name="tags" hidden value={tags.join(',')} />
 			<Button type="button" onclick={addTagField} extraClass="place-self-start">Add tag</Button>
 			<div>
