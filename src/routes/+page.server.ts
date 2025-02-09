@@ -1,14 +1,7 @@
-import type { Item } from "$lib/common/types/item";
+import { db } from "$lib/server/db";
+import { itemsTable, usersTable } from "$lib/server/db/schema";
+import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
-
-const items: Item[] = [
-	{
-		name: "Shovel",
-		tags: ["Garden", "Tool"],
-		price: 20.00,
-	},
-	{ name: "Hammer", tags: ["Tool"], price: 15.32 },
-];
 
 export const actions = {
 	// 	login: async ({ cookies, request }) => {
@@ -22,6 +15,18 @@ export const actions = {
 	// 	return { success: true };
 	// },
 	addItem: async ({ request }) => {
+		// TODO: Add proper users, sessions and tenancy checks
+		let user = await db.query.usersTable.findFirst({
+			where: eq(usersTable.id, 1),
+		});
+
+		if (!user) {
+			[user] = await db.insert(usersTable).values({
+				name: "Test",
+				email: "test@email.com",
+			}).returning();
+		}
+
 		const data = await request.formData();
 		const name = data.get("name");
 		const tags = data.get("tags");
@@ -30,20 +35,30 @@ export const actions = {
 			return { success: false, message: "Name is required" };
 		}
 
+		if (!price) {
+			return { success: false, message: "Price is required" };
+		}
+
 		const item = {
 			name: name.toString(),
 			tags: tags?.toString().split(",") ?? [],
-			price: price ? parseFloat(price.toString()) : undefined,
+			price: parseFloat(price.toString()),
 		};
 
-		console.log({ item });
+		await db.insert(itemsTable).values({
+			name: item.name,
+			tags: item.tags,
+			price: item.price,
+			userId: user.id,
+		});
 
-		items.push(item);
 		return { success: true };
 	},
 };
 
 export const load: PageServerLoad = async () => {
+	const items = await db.query.itemsTable.findMany();
+
 	return {
 		items,
 	};
