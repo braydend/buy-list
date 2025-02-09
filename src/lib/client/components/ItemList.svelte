@@ -12,20 +12,23 @@
 
 <ul>
 	{#each items as item}
-		<li class="flex flex-row border-b py-2">
-			<span>{item.name}</span>
-			<span class="flex flex-grow">
-				{#each item.tags as tag, i}
-					{#if i < 2}
-						<Tag label={tag} />
-					{:else}
-						<Tag label={`+${item.tags.length - i}`} />
-					{/if}
-				{/each}
-			</span>
-			<span class="place-self-end">
-				{item.price ? currencyFormatter(item.price) : '-'}
-			</span>
-		</li>
+		<div class="grid grid-cols-[100%100%] gap-8 overflow-x-scroll">
+			<li class="flex flex-row border-b py-2">
+				<span>{item.name}</span>
+				<span class="flex flex-grow">
+					{#each item.tags as tag, i}
+						{#if i < 2}
+							<Tag label={tag} />
+						{:else}
+							<Tag label={`+${item.tags.length - i}`} />
+						{/if}
+					{/each}
+				</span>
+				<span class="place-self-end">
+					{item.price ? currencyFormatter(item.price) : '-'}
+				</span>
+			</li>
+			<div class="bg-red-400">Delete</div>
+		</div>
 	{/each}
 </ul>
