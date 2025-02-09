@@ -50,7 +50,11 @@ export const actions = {
 		if (!success) {
 			return {
 				success: false,
-				message: error.errors.map(({ message }) => message).join(". "),
+				errors: error.errors.map(({ message, path }) => ({
+					message,
+					field: path.toString(),
+				})),
+				formData: item,
 			};
 		}
 
