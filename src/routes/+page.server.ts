@@ -1,5 +1,9 @@
 import { db } from "$lib/server/db";
-import { itemsTable, usersTable } from "$lib/server/db/schema";
+import {
+	itemInsertSchema,
+	itemsTable,
+	usersTable,
+} from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 
@@ -31,26 +35,26 @@ export const actions = {
 		const name = data.get("name");
 		const tags = data.get("tags");
 		const price = data.get("price");
-		if (!name?.toString()) {
-			return { success: false, message: "Name is required" };
-		}
-
-		if (!price) {
-			return { success: false, message: "Price is required" };
-		}
 
 		const item = {
-			name: name.toString(),
+			name,
 			tags: tags?.toString().split(",") ?? [],
-			price: parseFloat(price.toString()),
+			price,
+			userId: user.id,
 		};
 
-		await db.insert(itemsTable).values({
-			name: item.name,
-			tags: item.tags,
-			price: item.price,
-			userId: user.id,
-		});
+		const { data: validItem, success, error } = itemInsertSchema.safeParse(
+			item,
+		);
+
+		if (!success) {
+			return {
+				success: false,
+				message: error.errors.map(({ message }) => message).join(". "),
+			};
+		}
+
+		await db.insert(itemsTable).values(validItem);
 
 		return { success: true };
 	},
