@@ -38,7 +38,7 @@
 
 <main class="p-4">
 	<Heading level={1}>Buy list</Heading>
-	<CreateItem success={form?.success} error={form?.message} />
+	<CreateItem success={form?.success} errors={form?.errors} initialData={form?.formData} />
 
 	<div class="flex flex-row justify-between">
 		<Dropdown
