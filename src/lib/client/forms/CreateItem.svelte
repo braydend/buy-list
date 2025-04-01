@@ -66,7 +66,11 @@
 					type="text"
 					name="tag"
 					placeholder="Tag"
-					bind:value={tags[i]}
+					value={tags[i]}
+					oninput={(e) => {
+						// @ts-ignore This does work, but TS is mad becuase of Svelte's typings
+						tags[i] = e.target?.value ?? '';
+					}}
 					error={errors?.find(({ field }) => field === 'tags')?.message}
 				/>
 			{/each}
